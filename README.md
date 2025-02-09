@@ -90,12 +90,15 @@ For larger or more time-intensive changes, you're welcome to outline your ideas 
 
 <!-- Write-up/conclusion section -->
 
+
 #### On performance
 
 One of the main performance bottlenecks was lacking support for query parameters and relying all filtering on the client. 
 
 
 ### Other improvements
+
+ShowClearBtn state was redundant since we can conditionally show or hide the clear button if based on the presence of a search term state.
 
 #### Database connection
 

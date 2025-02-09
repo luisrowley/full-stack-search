@@ -20,7 +20,15 @@ async function startServer() {
       const db = getDB();
       const collection = db.collection("hotels");
 
-      const filter = search ? { name: { $regex: search, $options: "i" } } : {};
+      const filter = search
+      ? {
+          $or: [
+            { hotel_name: { $regex: search, $options: "i" } },
+            { country: { $regex: search, $options: "i" } },
+            { city: { $regex: search, $options: "i" } },
+          ],
+        }
+      : {};
       
       const hotels = await collection.find(filter).toArray();
       res.json(hotels);
