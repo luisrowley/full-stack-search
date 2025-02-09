@@ -3,8 +3,8 @@ import { getCodeSandboxHost } from "@codesandbox/utils";
 
 type Hotel = { _id: string, chain_name: string; hotel_name: string; city: string, country: string };
 
-const codeSandboxHost = getCodeSandboxHost(3001)
-const API_URL = codeSandboxHost ? `https://${codeSandboxHost}` : 'http://localhost:3001'
+const codeSandboxHost = getCodeSandboxHost(3001);
+const API_URL = codeSandboxHost ? `https://${codeSandboxHost}` : 'http://localhost:3001';
 
 const fetchAndFilterHotels = async (value: string) => {
   const hotelsData = await fetch(`${API_URL}/hotels`);

@@ -90,9 +90,21 @@ For larger or more time-intensive changes, you're welcome to outline your ideas 
 
 <!-- Write-up/conclusion section -->
 
-_When all the behaviour is implemented, feel free to add some observations or conclusions you like to share in the section_
+#### On performance
 
-### Database structure
+One of the main performance bottlenecks was lacking support for query parameters and relying all filtering on the client. 
+
+
+### Other improvements
+
+#### Database connection
+
+Uses a module-scoped MongoClient → Ensures a single database connection instance avoiding reconnecting on every request.
+Error Handling & Logging → Improved clarity on failures and successes.
+Prevents Memory Leaks → Ensures the in-memory DB shuts down cleanly on exit (SIGTERM)
+
+
+
 
 #### Hotels Collection
 

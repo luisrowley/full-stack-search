@@ -1,38 +1,38 @@
 import express from "express";
 import dotenv from "dotenv";
-import cors from 'cors';
-import { MongoClient } from "mongodb";
+import cors from "cors";
+import { connectDB, getDB } from "./db/init";
 
 dotenv.config();
 
-if (process.env.NODE_ENV !== 'production' && !process.env.DATABASE_URL) {
-  await import('./db/startAndSeedMemoryDB');
+const PORT = process.env.PORT || 3001;
+
+async function startServer() {
+  await connectDB();
+
+  const app = express();
+  app.use(cors());
+  app.use(express.json());
+
+  app.get("/hotels", async (req, res) => {
+    try {
+      const search = req.query.search as string | undefined;
+      const db = getDB();
+      const collection = db.collection("hotels");
+
+      const filter = search ? { name: { $regex: search, $options: "i" } } : {};
+      
+      const hotels = await collection.find(filter).toArray();
+      res.json(hotels);
+    } catch (error) {
+      console.error("Error fetching hotels:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  });
+
+  app.listen(PORT, () => {
+    console.log(`API Server started on port ${PORT}`);
+  });
 }
 
-const PORT = process.env.PORT || 3001;
-if (!process.env.DATABASE_URL) throw new Error('DATABASE_URL is not set');
-const DATABASE_URL = process.env.DATABASE_URL;
-
-const app = express();
-
-app.use(cors())
-app.use(express.json());
-
-app.get('/hotels', async (req, res) => {
-  const mongoClient = new MongoClient(DATABASE_URL);
-  console.log('Connecting to MongoDB...');
-
-  try {
-    await mongoClient.connect();
-    console.log('Successfully connected to MongoDB!');
-    const db = mongoClient.db()
-    const collection = db.collection('hotels');
-    res.send(await collection.find().toArray())
-  } finally {
-    await mongoClient.close();
-  }
-})
-
-app.listen(PORT, () => {
-  console.log(`API Server Started at ${PORT}`)
-})
+startServer().catch(console.error);
