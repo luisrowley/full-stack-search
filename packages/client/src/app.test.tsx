@@ -56,9 +56,7 @@ describe('App Component', () => {
     await waitFor(() => {
       expect(screen.getByText('Hotel A')).toBeInTheDocument();
       expect(screen.getByText('Hotel B')).toBeInTheDocument();
-      // expect(screen.getByText('United States')).toBeInTheDocument();
-      // expect(screen.getByText('New York')).toBeInTheDocument();
-      // expect(screen.getByText('Los Angeles')).toBeInTheDocument();
+      expect(screen.getByText('United States')).toBeInTheDocument();
     });
   });
 
