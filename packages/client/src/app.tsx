@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, useCallback, useRef, useMemo, useEffect } from 'react';
+import { useState, type ChangeEvent, useCallback, useRef, useEffect } from 'react';
 import { getCodeSandboxHost } from "@codesandbox/utils";
 import { debounce } from "lodash";
 import { Hotel } from './types/hotel';
