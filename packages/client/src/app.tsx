@@ -5,7 +5,7 @@ import { Hotel } from './types/hotel';
 
 const codeSandboxHost = getCodeSandboxHost(3001);
 const API_URL = codeSandboxHost ? `https://${codeSandboxHost}` : 'http://localhost:3001';
-const DEBOUNCE_DELAY = 1000;
+const DEBOUNCE_DELAY = 300;
 
 function App() {
   const [hotels, setHotels] = useState<Hotel[]>([]);
@@ -23,25 +23,26 @@ function App() {
     };
   }, []);
 
-  const fetchHotels = async (searchTerm: string) => {
+  const fetchHotels = useCallback(async (searchTerm: string) => {
     if (!searchTerm.trim()) return [];
 
+    setLoading(true);
     try {
       const response = await fetch(`${API_URL}/hotels?search=${searchTerm}`);
-      console.log("Fetching hotels with search term:", searchTerm); // remove
 
       if (!response.ok) {
         throw new Error(`HTTP error, status: ${response.status}`);
       }
       const data = await response.json();
-      console.log("API Response:", data); // remove
       return data as Hotel[];
 
     } catch (error) {
         console.error("Error fetching hotels:", error);
         return [];
-      }
-  };
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   async function handleSearch (value: string) {
     if (!value.trim()) {
@@ -66,9 +67,6 @@ function App() {
     setCountries(Array.from(countrySet));
     setCities(Array.from(citySet));
   };
-
-
-  // 
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -100,12 +98,13 @@ function App() {
                 />
                 {searchTerm && (
                   <span className="left-pan" onClick={clearSearch}>
-                    <i className="fa fa-close"></i>
+                    {loading ? <div className="spinner-border text-secondary ml-2" role="status"></div> :
+                      <i className="fa fa-close"></i>
+                    }
                   </span>
                 )}
               </div>
-              {loading ? <div className="spinner-border" role="status"></div> :
-                (hotels.length > 0 || countries.length > 0 || cities.length > 0) && (
+              {searchTerm && (
                 <div className="search-dropdown-menu dropdown-menu w-100 show p-2">
                 {hotels.length > 0 && (
                   <>
@@ -146,9 +145,12 @@ function App() {
                     ))}
                   </>
                 )}
+              {!loading && hotels.length === 0 && searchTerm &&
+                <div className="d-flex justify-content-center align-items-center mt-2">
+                  <p>No results found.</p>
+                </div>}
               </div>
               )}
-              {!loading && hotels.length === 0 && searchTerm && <p>No results found.</p>}
             </div>
           </div>
         </div>
