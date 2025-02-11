@@ -14,7 +14,11 @@ function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
   // Debounce to reduce API calls
-  const debouncedSearch = useRef(debounce(handleSearch, DEBOUNCE_DELAY)).current;
+  const debouncedSearch = useRef(
+    debounce(async (value: string) => {
+      await fetchHotels(value);
+    }, DEBOUNCE_DELAY)
+  ).current;
 
   // Stop any pending invocation of the debounced function
   useEffect(() => {
@@ -24,7 +28,10 @@ function App() {
   }, []);
 
   const fetchHotels = useCallback(async (searchTerm: string) => {
-    if (!searchTerm.trim()) return [];
+    if (!searchTerm.trim()) {
+      clearSearch();
+      return;
+    }
 
     setLoading(true);
     try {
@@ -33,37 +40,26 @@ function App() {
       if (!response.ok) {
         throw new Error(`HTTP error, status: ${response.status}`);
       }
-      const data = await response.json();
-      return data as Hotel[];
-
+      const data = (await response.json()) as Hotel[];
+      processHotelData(data, searchTerm);
     } catch (error) {
         console.error("Error fetching hotels:", error);
-        return [];
+        clearSearch();
     } finally {
       setLoading(false);
     }
   }, []);
 
-  async function handleSearch (value: string) {
-    if (!value.trim()) {
-      clearSearch();
-      return;
-    }
-
-    const filteredHotels = await fetchHotels(value);
+  const processHotelData = (hotelsData: Hotel[], searchTerm: string) => {
     const countrySet = new Set<string>();
     const citySet = new Set<string>();
 
-    filteredHotels.forEach((hotel) => {
-      if (hotel.country.toLowerCase().includes(value.toLowerCase())) {
-        countrySet.add(hotel.country);
-      }
-      if (hotel.city.toLowerCase().includes(value.toLowerCase())) {
-        citySet.add(hotel.city);
-      }
+    hotelsData.forEach((hotel) => {
+      if (hotel.country.toLowerCase().includes(searchTerm.toLowerCase())) countrySet.add(hotel.country);
+      if (hotel.city.toLowerCase().includes(searchTerm.toLowerCase())) citySet.add(hotel.city);
     });
 
-    setHotels(filteredHotels);
+    setHotels(hotelsData);
     setCountries(Array.from(countrySet));
     setCities(Array.from(citySet));
   };
@@ -88,7 +84,7 @@ function App() {
           <div className="col-md-6">
             <div className="dropdown">
               <div className="form">
-                <i className="fa fa-search"></i>
+                <i className="fa fa-search" aria-hidden="true"></i>
                 <input
                   type="text"
                   className="form-control form-input"
@@ -97,9 +93,9 @@ function App() {
                   onChange={handleChange}
                 />
                 {searchTerm && (
-                  <span className="left-pan" onClick={clearSearch}>
+                  <span className="left-pan" role="clear-button" onClick={clearSearch}>
                     {loading ? <div className="spinner-border text-secondary ml-2" role="status"></div> :
-                      <i className="fa fa-close"></i>
+                      <i className="fa fa-close" aria-hidden="true"></i>
                     }
                   </span>
                 )}
@@ -110,12 +106,14 @@ function App() {
                   <>
                     <h2>Hotels</h2>
                     {hotels.map((hotel) => (
-                      <li key={hotel._id}>
-                        <a className="dropdown-item">
-                          <i className="fa fa-building mr-2"></i> {hotel.hotel_name}
-                        </a>
-                        <hr className="divider" />
-                      </li>
+                      <ul className="list-unstyled">
+                        <li key={hotel._id}>
+                          <a className="dropdown-item">
+                            <i className="fa fa-building mr-2" aria-hidden="true"></i> {hotel.hotel_name}
+                          </a>
+                          <hr className="divider" />
+                        </li>
+                      </ul>
                     ))}
                   </>
                 )}
@@ -123,12 +121,14 @@ function App() {
                   <>
                     <h2>Countries</h2>
                     {countries.map((country, index) => (
-                      <li key={index}>
-                        <a className="dropdown-item">
-                          <i className="fa fa-globe mr-2"></i> {country}
-                        </a>
-                        <hr className="divider" />
-                      </li>
+                      <ul className="list-unstyled">
+                        <li key={index}>
+                          <a className="dropdown-item">
+                            <i className="fa fa-globe mr-2" aria-hidden="true"></i> {country}
+                          </a>
+                          <hr className="divider" />
+                        </li>
+                      </ul>
                     ))}
                   </>
                 )}
@@ -136,12 +136,14 @@ function App() {
                   <>
                     <h2>Cities</h2>
                     {cities.map((city, index) => (
-                      <li key={index}>
-                        <a className="dropdown-item">
-                          <i className="fa fa-map-marker mr-2"></i> {city}
-                        </a>
-                        <hr className="divider" />
-                      </li>
+                      <ul className="list-unstyled">
+                        <li key={index}>
+                          <a className="dropdown-item">
+                            <i className="fa fa-map-marker mr-2" aria-hidden="true"></i> {city}
+                          </a>
+                          <hr className="divider" />
+                        </li>
+                      </ul>
                     ))}
                   </>
                 )}
