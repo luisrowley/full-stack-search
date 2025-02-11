@@ -1,39 +1,51 @@
-import { useState, type ChangeEvent, useCallback } from 'react';
+import { useState, type ChangeEvent, useCallback, useRef, useMemo, useEffect } from 'react';
 import { getCodeSandboxHost } from "@codesandbox/utils";
 import { debounce } from "lodash";
-
-type Hotel = {
-  _id: string,
-  chain_name: string;
-  hotel_name: string;
-  city: string,
-  country: string
-};
+import { Hotel } from './types/hotel';
 
 const codeSandboxHost = getCodeSandboxHost(3001);
 const API_URL = codeSandboxHost ? `https://${codeSandboxHost}` : 'http://localhost:3001';
+const DEBOUNCE_DELAY = 1000;
 
 function App() {
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const [countries, setCountries] = useState<string[]>([]);
   const [cities, setCities] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(false);
+  // Debounce to reduce API calls
+  const debouncedSearch = useRef(debounce(handleSearch, DEBOUNCE_DELAY)).current;
+
+  // Stop any pending invocation of the debounced function
+  useEffect(() => {
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, []);
 
   const fetchHotels = async (searchTerm: string) => {
-    console.log("Fetching hotels with search term:", searchTerm);
-  
-    const response = await fetch(`${API_URL}/hotels?search=${searchTerm}`);
-    const data = await response.json();
-  
-    console.log("API Response:", data);
-    return data as Hotel[];
+    if (!searchTerm.trim()) return [];
+
+    try {
+      const response = await fetch(`${API_URL}/hotels?search=${searchTerm}`);
+      console.log("Fetching hotels with search term:", searchTerm); // remove
+
+      if (!response.ok) {
+        throw new Error(`HTTP error, status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log("API Response:", data); // remove
+      return data as Hotel[];
+
+    } catch (error) {
+        console.error("Error fetching hotels:", error);
+        return [];
+      }
   };
 
-  const handleSearch = async (value: string) => {
+  async function handleSearch (value: string) {
     if (!value.trim()) {
-      setHotels([]);
-      setCountries([]);
-      setCities([]);
+      clearSearch();
       return;
     }
 
@@ -55,8 +67,8 @@ function App() {
     setCities(Array.from(citySet));
   };
 
-  // Debounce to reduce API calls
-  const debouncedSearch = useCallback(debounce(handleSearch, 300), []);
+
+  // 
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -92,7 +104,8 @@ function App() {
                   </span>
                 )}
               </div>
-              {(hotels.length > 0 || countries.length > 0 || cities.length > 0) && (
+              {loading ? <div className="spinner-border" role="status"></div> :
+                (hotels.length > 0 || countries.length > 0 || cities.length > 0) && (
                 <div className="search-dropdown-menu dropdown-menu w-100 show p-2">
                 {hotels.length > 0 && (
                   <>
@@ -135,6 +148,7 @@ function App() {
                 )}
               </div>
               )}
+              {!loading && hotels.length === 0 && searchTerm && <p>No results found.</p>}
             </div>
           </div>
         </div>

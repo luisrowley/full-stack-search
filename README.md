@@ -80,8 +80,8 @@ When clicking on one of the `Hotels`, `Cities` or `Countries` links, the applica
 
 ### Limitations
 
-Given the time constraints, we do not expect a fully production-ready solution. We're primarily interested in the approach and the overall quality of the solution. 
-Feel free to modify the current codebase as needed, including adding or removing dependencies. 
+Given the time constraints, we do not expect a fully production-ready solution. We're primarily interested in the approach and the overall quality of the solution.
+Feel free to modify the current codebase as needed, including adding or removing dependencies.
 For larger or more time-intensive changes, you're welcome to outline your ideas in the write-up section below and discuss them further during the call.
 
 <img src="./assets/search-example.png" width="400px" />
@@ -90,11 +90,9 @@ For larger or more time-intensive changes, you're welcome to outline your ideas 
 
 <!-- Write-up/conclusion section -->
 
-
 #### On performance
 
-One of the main performance bottlenecks was lacking support for query parameters and relying all filtering on the client. 
-
+One of the main performance bottlenecks was lacking support for query parameters and relying all filtering on the client.
 
 ### Other improvements
 
@@ -106,8 +104,12 @@ Uses a module-scoped MongoClient → Ensures a single database connection instan
 Error Handling & Logging → Improved clarity on failures and successes.
 Prevents Memory Leaks → Ensures the in-memory DB shuts down cleanly on exit (SIGTERM)
 
+#### Filtering efficiency
 
+The filter object dynamically changes based on whether the search variable contains a value.
 
+- If search is provided, it constructs a filter using $or, allowing a case-insensitive partial match against hotel_name, country, or city.
+- If search is empty, it returns an empty filter ({}), which means no filtering is applied and all records are returned.
 
 #### Hotels Collection
 
