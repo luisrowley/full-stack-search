@@ -11,7 +11,8 @@
     "start:client": "npm run -w client start",
     "dev": "npm start",
     "test": "npm run -w client test",
-    "api-no-watch": "npm run -w api dev:no-watch"
+    "api-no-watch": "npm run -w api dev:no-watch",
+    "test:api": "npm run -w api test"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.15",
