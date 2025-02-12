@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import { connectDB, getDB } from "./db/init";
+import { escapeRegExp } from "utils/sanitizers";
 
 dotenv.config();
 
@@ -16,20 +17,21 @@ async function startServer() {
 
   app.get("/hotels", async (req, res) => {
     try {
-      const search = req.query.search as string | undefined;
+      const search = req.query.search as string;
+      const sanitizedSearch = escapeRegExp(search);
       const db = getDB();
       const collection = db.collection("hotels");
 
       const filter = search
-      ? {
-          $or: [
-            { hotel_name: { $regex: search, $options: "i" } },
-            { country: { $regex: search, $options: "i" } },
-            { city: { $regex: search, $options: "i" } },
-          ],
-        }
-      : {};
-      
+        ? {
+            $or: [
+              { hotel_name: { $regex: sanitizedSearch, $options: "i" } },
+              { country: { $regex: sanitizedSearch, $options: "i" } },
+              { city: { $regex: sanitizedSearch, $options: "i" } },
+            ],
+          }
+        : {};
+
       const hotels = await collection.find(filter).toArray();
       res.json(hotels);
     } catch (error) {

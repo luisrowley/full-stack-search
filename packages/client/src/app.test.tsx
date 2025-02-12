@@ -91,4 +91,28 @@ describe('App Component', () => {
       expect(screen.queryByText('No results found.')).toBeInTheDocument();
     });
   });
+
+  test('should debounce the search term and avoid too many API calls', async () => {
+    const mockHotels = [
+      { _id: '1', hotel_name: 'Hotel A', country: 'United States', city: 'New York' },
+    ];
+
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: vi.fn().mockResolvedValue(mockHotels),
+    });
+
+    render(<App />);
+
+    const input = screen.getByPlaceholderText('Search accommodation...');
+
+    // Fast typing to test debounce
+    fireEvent.change(input, { target: { value: 'United' } });
+    fireEvent.change(input, { target: { value: 'United States' } });
+
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalledTimes(1); // Ensure fetch is only called once
+      expect(screen.getByText('Hotel A')).toBeInTheDocument();
+    });
+  });
 });

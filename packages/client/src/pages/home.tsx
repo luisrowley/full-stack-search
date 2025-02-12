@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { debounce } from "lodash";
 import { Hotel } from '../types/hotel';
 import { API_URL, DEBOUNCE_DELAY } from '../constants/api-connection';
+import { sanitizeInput } from '../utils/sanitizers';
 
 function HomePage () {
     const [hotels, setHotels] = useState<Hotel[]>([]);
@@ -64,7 +65,7 @@ function HomePage () {
     };
   
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-      const value = event.target.value;
+      const value = sanitizeInput(event.target.value);
       setSearchTerm(value);
       debouncedSearch(value);
     };
