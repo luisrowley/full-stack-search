@@ -88,7 +88,7 @@ For larger or more time-intensive changes, you're welcome to outline your ideas 
 
 ### Write-up
 
-<!-- Write-up/conclusion section -->
+This section is going to gather a comprehensive list of all main changes done to the project. For more specific details there are dedicated sections in this document.
 
 #### On performance
 
@@ -110,6 +110,8 @@ The filter object dynamically changes based on whether the search variable conta
 
 - If search is provided, it constructs a filter using $or, allowing a case-insensitive partial match against hotel_name, country, or city.
 - If search is empty, it returns an empty filter ({}), which means no filtering is applied and all records are returned.
+
+### Production readiness
 
 #### Hotels Collection
 

@@ -1,9 +1,10 @@
 import { useState, type ChangeEvent, useCallback, useRef, useEffect } from 'react';
 import { debounce } from "lodash";
 import { Hotel } from '../types/hotel';
-import { API_URL, DEBOUNCE_DELAY } from '../constants/api-connection';
+import { DEBOUNCE_DELAY } from '../constants/api-connection';
 import { sanitizeInput } from '../utils/sanitizers';
 import SearchResultsSection from '../components/SearchResultsSection';
+import { fetchHotels } from '../services/hotelService';
 
 function HomePage () {
     const [hotels, setHotels] = useState<Hotel[]>([]);
@@ -15,7 +16,7 @@ function HomePage () {
     // Debounce to reduce API calls
     const debouncedSearch = useRef(
       debounce(async (value: string) => {
-        await fetchHotels(value);
+        await handleFetchHotels(value);
       }, DEBOUNCE_DELAY)
     ).current;
   
@@ -25,25 +26,14 @@ function HomePage () {
         debouncedSearch.cancel();
       };
     }, []);
-  
-    const fetchHotels = useCallback(async (searchTerm: string) => {
-      if (!searchTerm.trim()) {
-        clearSearch();
-        return;
-      }
-  
+
+    const handleFetchHotels = useCallback(async (searchTerm: string) => {
       setLoading(true);
       try {
-        const response = await fetch(`${API_URL}/hotels?search=${searchTerm}`);
-  
-        if (!response.ok) {
-          throw new Error(`HTTP error, status: ${response.status}`);
-        }
-        const data = (await response.json()) as Hotel[];
+        const data = await fetchHotels(searchTerm);
         processHotelData(data, searchTerm);
-      } catch (error) {
-          console.error("Error fetching hotels:", error);
-          clearSearch();
+      } catch {
+        clearSearch();
       } finally {
         setLoading(false);
       }
