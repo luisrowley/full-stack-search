@@ -1,4 +1,4 @@
-import { vi, expect, test, beforeEach, afterEach, describe } from 'vitest';
+import { vi, expect, test, beforeEach, describe } from 'vitest';
 import { MongoClient } from 'mongodb';
 import { connectDB } from './db/init';
 
