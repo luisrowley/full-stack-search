@@ -7,7 +7,7 @@ import { hotels } from "./seeds/hotels";
 let mongod: MongoMemoryServer | null = null;
 
 export async function startAndSeedMemoryDB(): Promise<string> {
-  mongod = new MongoMemoryServer();
+  mongod = new MongoMemoryServer({ instance: { port: 3002 } });
   await mongod.start();
 
   const uri = mongod.getUri();
