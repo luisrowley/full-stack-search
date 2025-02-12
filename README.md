@@ -109,7 +109,7 @@ This restructuring makes the codebase more readable, scalable, and easier to mai
 
 2. **Navigation stack at root level**
 
-As part of the requirements were to implement navigation from the main view to a details page, this feature was implemented using "`react-router-dom`". This navigation is bidirectional, allowing the user to go back and forth from the main to the details page.
+As part of the requirements were to implement navigation from the main view to a details page, this feature was implemented using "`react-router-dom`". This navigation is bidirectional, allowing the user to go back and forth between the main and the details page.
 
 3. **Extracted API Calls into a Service Layer**
 
