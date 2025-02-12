@@ -156,14 +156,21 @@ npm run test:api
 
 For **Production** deployments a suitable **release plan** should be considered, including:
 
-	1. Expanding existing unit, integration and e2e tests.
-	2. Chaos Testing: Simulating failure scenarios to test the service's resilience.
-	3. CI/CD Pipeline setup: with code linting, static analysis, unit and integration tests steps.
-	4. Monitoring and Observability of the services (e.g.: Prometheus metrics and Grafana dashboards).
-	5. Post-release plan: deploying the service gradually by different regions (e.g.: EU, US, AP)
-	6. Alerting mechanisms for key metrics, e.g.: High latency, error rates surpassing a set threshold.
-	7. Auto-Rollback to revert to the previous version if the error rates or latency surpasses certain limits.
-	8. Scalability: Setting auto-scaling based on traffic or CPU/memory usage for the service (AWS Auto Scaling).
+	1) Expanding existing unit, integration and e2e tests.
+	
+	2) Chaos Testing: Simulating failure scenarios to test the service's resilience.
+	
+	3) CI/CD Pipeline setup: with code linting, static analysis, unit and integration tests steps.
+	
+	4) Monitoring and Observability of the services (e.g.: Prometheus metrics and Grafana dashboards).
+	
+	5) Post-release plan: deploying the service gradually by different regions (e.g.: EU, US, AP)
+	
+	6) Alerting mechanisms for key metrics, e.g.: High latency, error rates surpassing a set threshold.
+	
+	7) Auto-Rollback to revert to the previous version if the error rates or latency surpasses certain limits.
+	
+	8) Scalability: Setting auto-scaling based on traffic or CPU/memory usage for the service (AWS Auto Scaling).
 	
 
 
