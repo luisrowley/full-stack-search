@@ -102,8 +102,8 @@ Proper separation of concerns was made by organising code into dedicated folders
 * Services
 
 The view layer is now divided between two main components (pages):
-`Home`
-`SearchDetails`
+* `Home`
+* `SearchDetails`
 
 This restructuring makes the codebase more readable, scalable, and easier to maintain.
 
