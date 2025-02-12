@@ -88,21 +88,43 @@ For larger or more time-intensive changes, you're welcome to outline your ideas 
 
 ### Write-up
 
-This section is going to gather a comprehensive list of all main changes done to the project. For more specific details there are dedicated sections in this document.
+This section is going to gather a comprehensive list of all main changes done to the project. Specific details are outlined in the following sections of this document:
+
+1. General refactor of front-end structure
+
+This project presented a monolithic approach where almost the entire client logic was done in App.tsx. To make this structure more maintainable and modular, a different file structure has been implemented. For proper separation of concerns, we now have folders for components, pages, types, constants and any other entity that may be useful. This makes files easier to read as they are shorter and to maintain by peer developers as you know each part of the application has its own place. The view layer of the application is shared between two main components: Home and SearchDetails.
+
+2. Navigation stack at root level
+
+As part of the requirements were to implement navigation from the main view to a details page, this feature was implemented using "react-router-dom". This navigation is bidirectional, allowing the user to go back and forth from the main to the details page.
+
+3. Extracted API Calls into a Service Layer
+
+Applying a separated service layer makes react components leaner. In this case the dedicated logic to fetch hotels from the API was moved to its own file at `services/hotelService.ts` so that the main "Home" component is in charge of just rendering the view. This also allows easier testing and mocking of the API calls.
+
+4. Encapsulated BE into functions
+Separated backend logic for better reusability and easier testing. Added constants for key connection parameters.
+
+#### UX improvements
+
+- Introduced a loading spinner for cases in which a query to an external server may take longer.
+- Click-to-clear search field and results: Implemented a clear button that resets the search.
 
 #### On performance
 
-One of the main performance bottlenecks was lacking support for query parameters and relying all filtering on the client.
+- One of the main performance bottlenecks was lacking support for query parameters and relying all filtering on the client. This was solved by implementing a query parameter for seach. This allows filtering hotels by name (e.g. `/hotels?search=resort`) reducing the amount of data sent to the client.
+
+- A debouncing mechanism was implemented to avoid sending a new request for each key stroke in the search input.
 
 ### Other improvements
 
-ShowClearBtn state was redundant since we can conditionally show or hide the clear button if based on the presence of a search term state.
-
 #### Database connection
 
-Uses a module-scoped MongoClient → Ensures a single database connection instance avoiding reconnecting on every request.
-Error Handling & Logging → Improved clarity on failures and successes.
-Prevents Memory Leaks → Ensures the in-memory DB shuts down cleanly on exit (SIGTERM)
+- Uses a module-scoped MongoClient → Ensures a single database connection instance avoiding reconnecting on every request.
+- Error Handling & Logging → Improved clarity on failures and successes.
+- Prevents Memory Leaks → Ensures the in-memory DB shuts down cleanly on exit (SIGTERM)
+- ShowClearBtn state was redundant since we can conditionally show or hide the clear button if based on the presence of a search term state.
+- Security wise, input sanitisation was implemented both at the FE and BE level.
 
 #### Filtering efficiency
 
@@ -111,7 +133,14 @@ The filter object dynamically changes based on whether the search variable conta
 - If search is provided, it constructs a filter using $or, allowing a case-insensitive partial match against hotel_name, country, or city.
 - If search is empty, it returns an empty filter ({}), which means no filtering is applied and all records are returned.
 
+#### Unit and e2e tests
+
+Testing has been added to both the client and the API side.
+
+
 ### Production readiness
+
+- Whenver possible it would be good practice to avoid loading Bootstrap CSS from an external CDN. This posses both security and stability risks, as we cannot guarantee the uptime of the CDN resource or connectivity issues. Instead a better approach would be to have it as a dependency of the project to be installed (npm package for instance).
 
 #### Hotels Collection
 
