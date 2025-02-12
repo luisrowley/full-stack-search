@@ -116,6 +116,7 @@ As part of the requirements were to implement navigation from the main view to a
 Applying a separated service layer makes react components leaner. In this case the dedicated logic to fetch hotels from the API was moved to its own file at `services/hotelService.ts` so that the main "Home" component is in charge of just rendering the view. This also allows easier testing and mocking of the API calls.
 
 4. **Backend refactor and encapsulation**
+
 Separated backend logic into functions for better reusability and easier testing. Added constants for key connection parameters.
 
 #### UX improvements
