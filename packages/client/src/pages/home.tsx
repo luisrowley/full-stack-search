@@ -4,6 +4,7 @@ import { debounce } from "lodash";
 import { Hotel } from '../types/hotel';
 import { API_URL, DEBOUNCE_DELAY } from '../constants/api-connection';
 import { sanitizeInput } from '../utils/sanitizers';
+import SearchResultsSection from '../components/SearchResultsSection';
 
 function HomePage () {
     const [hotels, setHotels] = useState<Hotel[]>([]);
@@ -11,7 +12,6 @@ function HomePage () {
     const [cities, setCities] = useState<string[]>([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
   
     // Debounce to reduce API calls
     const debouncedSearch = useRef(
@@ -103,55 +103,19 @@ function HomePage () {
                 {searchTerm && (
                   <div className="search-dropdown-menu dropdown-menu w-100 show p-2">
                   {hotels.length > 0 && (
-                    <>
-                      <h2>Hotels</h2>
-                      {hotels.map((hotel) => (
-                        <ul className="list-unstyled">
-                          <li key={hotel._id} onClick={() => navigate(`/details/hotels/${hotel.hotel_name}`)} role="button">
-                            <a className="dropdown-item">
-                              <i className="fa fa-building mr-2" aria-hidden="true"></i> {hotel.hotel_name}
-                            </a>
-                            <hr className="divider" />
-                          </li>
-                        </ul>
-                      ))}
-                    </>
+                    <SearchResultsSection title="Hotels" items={hotels} iconClass="fa fa-building" />
                   )}
                   {countries.length > 0 && (
-                    <>
-                      <h2>Countries</h2>
-                      {countries.map((country, index) => (
-                        <ul className="list-unstyled">
-                          <li key={index} onClick={() => navigate(`/details/countries/${country}`)} role="button">
-                            <a className="dropdown-item">
-                              <i className="fa fa-globe mr-2" aria-hidden="true"></i> {country}
-                            </a>
-                            <hr className="divider" />
-                          </li>
-                        </ul>
-                      ))}
-                    </>
+                    <SearchResultsSection title="Countries" items={countries} iconClass="fa fa-globe" />
                   )}
                   {cities.length > 0 && (
-                    <>
-                      <h2>Cities</h2>
-                      {cities.map((city, index) => (
-                        <ul className="list-unstyled">
-                          <li key={index} onClick={() => navigate(`/details/cities/${city}`)} role="button">
-                            <a className="dropdown-item">
-                              <i className="fa fa-map-marker mr-2" aria-hidden="true"></i> {city}
-                            </a>
-                            <hr className="divider" />
-                          </li>
-                        </ul>
-                      ))}
-                    </>
+                    <SearchResultsSection title="Cities" items={cities} iconClass="fa fa-map-marker" />
                   )}
-                {!loading && hotels.length === 0 && searchTerm &&
-                  <div className="d-flex justify-content-center align-items-center mt-2">
-                    <p>No results found.</p>
-                  </div>}
-                </div>
+                  {!loading && hotels.length === 0 && searchTerm &&
+                    <div className="d-flex justify-content-center align-items-center mt-2">
+                      <p>No results found.</p>
+                    </div>}
+                  </div>
                 )}
               </div>
             </div>
