@@ -123,7 +123,7 @@ Separated backend logic into functions for better reusability and easier testing
 
 - Introduced a loading spinner for cases in which a query to an external server may take longer.
 - Click-to-clear search field and results: Implemented a clear button that resets the search.
-- ShowClearBtn state was redundant since we can conditionally show or hide the clear button if based on the presence of a search term state.
+- ShowClearBtn state was redundant since we can conditionally show or hide the clear button based on the presence of a search term state.
 
 #### Performance Optimizations
 
