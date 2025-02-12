@@ -147,7 +147,6 @@ Separated backend logic into functions for better reusability and easier testing
 The filter object dynamically changes based on whether the search variable contains a value.
 
 - If search is provided, it constructs a filter using $or, allowing a case-insensitive partial match against hotel_name, country, or city.
-- If search is empty, it returns an empty filter ({}), which means no filtering is applied and all records are returned.
 
 #### Unit and e2e tests
 
