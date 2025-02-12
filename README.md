@@ -88,22 +88,35 @@ For larger or more time-intensive changes, you're welcome to outline your ideas 
 
 ### Write-up
 
-This section is going to gather a comprehensive list of all main changes done to the project. Specific details are outlined in the following sections of this document:
+This section provides a comprehensive list of all the major changes made to the project. Specific details are outlined in the following sections of this document:
 
-1. General refactor of front-end structure
+1. **General refactor of front-end structure**
 
-This project presented a monolithic approach where almost the entire client logic was done in App.tsx. To make this structure more maintainable and modular, a different file structure has been implemented. For proper separation of concerns, we now have folders for components, pages, types, constants and any other entity that may be useful. This makes files easier to read as they are shorter and to maintain by peer developers as you know each part of the application has its own place. The view layer of the application is shared between two main components: Home and SearchDetails.
+Originally, the project followed a monolithic approach, with almost all client logic residing in App.tsx. To improve maintainability and modularity, a new file structure was introduced. To make this structure more maintainable and modular, a different file structure has been implemented.
 
-2. Navigation stack at root level
+Proper separation of concerns was made by organising code into dedicated folders for:
+* Components
+* Pages
+* Types
+* Constants
+* Services
 
-As part of the requirements were to implement navigation from the main view to a details page, this feature was implemented using "react-router-dom". This navigation is bidirectional, allowing the user to go back and forth from the main to the details page.
+The view layer is now divided between two main components (pages):
+`Home`
+`SearchDetails`
 
-3. Extracted API Calls into a Service Layer
+This restructuring makes the codebase more readable, scalable, and easier to maintain.
+
+2. **Navigation stack at root level**
+
+As part of the requirements were to implement navigation from the main view to a details page, this feature was implemented using "`react-router-dom`". This navigation is bidirectional, allowing the user to go back and forth from the main to the details page.
+
+3. **Extracted API Calls into a Service Layer**
 
 Applying a separated service layer makes react components leaner. In this case the dedicated logic to fetch hotels from the API was moved to its own file at `services/hotelService.ts` so that the main "Home" component is in charge of just rendering the view. This also allows easier testing and mocking of the API calls.
 
-4. Encapsulated BE into functions
-Separated backend logic for better reusability and easier testing. Added constants for key connection parameters.
+4. **Backend refactor and encapsulation**
+Separated backend logic into functions for better reusability and easier testing. Added constants for key connection parameters.
 
 #### UX improvements
 
@@ -111,7 +124,7 @@ Separated backend logic for better reusability and easier testing. Added constan
 - Click-to-clear search field and results: Implemented a clear button that resets the search.
 - ShowClearBtn state was redundant since we can conditionally show or hide the clear button if based on the presence of a search term state.
 
-#### On performance
+#### Performance Optimizations
 
 - One of the main performance bottlenecks was lacking support for query parameters and relying all filtering on the client. This was solved by implementing a query parameter for seach. This allows filtering hotels by name (e.g. `/hotels?search=resort`) reducing the amount of data sent to the client.
 
@@ -123,10 +136,10 @@ Separated backend logic for better reusability and easier testing. Added constan
 
 #### Database connection
 
-- Uses a module-scoped MongoClient → Ensures a single database connection instance avoiding reconnecting on every request.
-- Error Handling & Logging → Improved clarity on failures and successes.
-- Prevents Memory Leaks → Ensures the in-memory DB shuts down cleanly on exit (SIGTERM)
-- Security wise, input sanitisation was implemented both at the FE and BE level.
+- **Uses a module-scoped MongoClient** → Ensures a single database connection instance avoiding reconnecting on every request.
+- **Error Handling & Logging** → Improved clarity on failures and successes.
+- **Prevents Memory Leaks** → Ensures the in-memory DB shuts down cleanly on exit (SIGTERM)
+- **Security-wise**, input sanitisation was implemented both at the FE and BE level.
 
 #### Filtering efficiency
 
