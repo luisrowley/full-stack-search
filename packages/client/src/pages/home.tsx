@@ -1,5 +1,4 @@
 import { useState, type ChangeEvent, useCallback, useRef, useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
 import { debounce } from "lodash";
 import { Hotel } from '../types/hotel';
 import { API_URL, DEBOUNCE_DELAY } from '../constants/api-connection';
