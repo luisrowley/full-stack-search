@@ -92,7 +92,7 @@ This section provides a comprehensive list of all the major changes made to the 
 
 1. **General refactor of front-end structure**
 
-Originally, the project followed a monolithic approach, with almost all client logic residing in App.tsx. To improve maintainability and modularity, a new file structure was introduced. To make this structure more maintainable and modular, a different file structure has been implemented.
+Originally, the project followed a monolithic approach, with almost all client logic residing in App.tsx. To improve maintainability and modularity, a new file structure was introduced.
 
 Proper separation of concerns was made by organising code into dedicated folders for:
 * Components
