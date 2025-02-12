@@ -2,7 +2,6 @@ import { vi, expect, test, beforeEach, afterEach, describe } from 'vitest';
 import { MongoClient } from 'mongodb';
 import { connectDB } from './db/init';
 
-// Mocks for MongoDB client and memory server
 vi.mock('mongodb', () => ({
   MongoClient: vi.fn().mockImplementation(() => ({
     connect: vi.fn(),
@@ -30,12 +29,10 @@ vi.mock('mongodb-memory-server', () => {
   };
 });
 
-// Reset mocks before each test
 beforeEach(() => {
   vi.clearAllMocks();
 });
 
-// Test for `connectDB`
 describe('connectDB', () => {
   test('should connect to database when DATABASE_URL is set', async () => {
     process.env.DATABASE_URL = 'mongodb://localhost:3003';
