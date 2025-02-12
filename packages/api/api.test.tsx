@@ -6,7 +6,12 @@ import { connectDB } from './db/init';
 vi.mock('mongodb', () => ({
   MongoClient: vi.fn().mockImplementation(() => ({
     connect: vi.fn(),
-    db: vi.fn().mockReturnValue({}),
+    db: vi.fn().mockReturnValue({
+      collection: vi.fn().mockReturnValue({
+        insertMany: vi.fn(),
+        find: vi.fn().mockReturnValue({ toArray: vi.fn().mockResolvedValue([]) }),
+      }),
+    }),
     close: vi.fn(),
   })),
 }));
