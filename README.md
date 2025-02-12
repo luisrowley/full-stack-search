@@ -109,12 +109,15 @@ Separated backend logic for better reusability and easier testing. Added constan
 
 - Introduced a loading spinner for cases in which a query to an external server may take longer.
 - Click-to-clear search field and results: Implemented a clear button that resets the search.
+- ShowClearBtn state was redundant since we can conditionally show or hide the clear button if based on the presence of a search term state.
 
 #### On performance
 
 - One of the main performance bottlenecks was lacking support for query parameters and relying all filtering on the client. This was solved by implementing a query parameter for seach. This allows filtering hotels by name (e.g. `/hotels?search=resort`) reducing the amount of data sent to the client.
 
 - A debouncing mechanism was implemented to avoid sending a new request for each key stroke in the search input.
+
+- Whenver possible it would be good practice to avoid loading Bootstrap CSS from an external CDN. This posses both security and stability risks, as we cannot guarantee the uptime of the CDN resource or connectivity issues. Instead a better approach would be to have it as a dependency of the project to be installed (npm package for instance).
 
 ### Other improvements
 
@@ -123,7 +126,6 @@ Separated backend logic for better reusability and easier testing. Added constan
 - Uses a module-scoped MongoClient → Ensures a single database connection instance avoiding reconnecting on every request.
 - Error Handling & Logging → Improved clarity on failures and successes.
 - Prevents Memory Leaks → Ensures the in-memory DB shuts down cleanly on exit (SIGTERM)
-- ShowClearBtn state was redundant since we can conditionally show or hide the clear button if based on the presence of a search term state.
 - Security wise, input sanitisation was implemented both at the FE and BE level.
 
 #### Filtering efficiency
@@ -137,10 +139,33 @@ The filter object dynamically changes based on whether the search variable conta
 
 Testing has been added to both the client and the API side.
 
+For running the tests for the client, you can simply run:
+
+```bash
+npm run test
+```
+
+A custom script has been added to `package.json` to add suport for API unit tests:
+
+```bash
+npm run test:api
+```
+
 
 ### Production readiness
 
-- Whenver possible it would be good practice to avoid loading Bootstrap CSS from an external CDN. This posses both security and stability risks, as we cannot guarantee the uptime of the CDN resource or connectivity issues. Instead a better approach would be to have it as a dependency of the project to be installed (npm package for instance).
+For **Production** deployments a suitable **release plan** should be considered, including:
+
+	1. Expanding existing unit, integration and e2e tests.
+	2. Chaos Testing: Simulating failure scenarios to test the service's resilience.
+	3. CI/CD Pipeline setup: with code linting, static analysis, unit and integration tests steps.
+	4. Monitoring and Observability of the services (e.g.: Prometheus metrics and Grafana dashboards).
+	5. Post-release plan: deploying the service gradually by different regions (e.g.: EU, US, AP)
+	6. Alerting mechanisms for key metrics, e.g.: High latency, error rates surpassing a set threshold.
+	7. Auto-Rollback to revert to the previous version if the error rates or latency surpasses certain limits.
+	8. Scalability: Setting auto-scaling based on traffic or CPU/memory usage for the service (AWS Auto Scaling).
+	
+
 
 #### Hotels Collection
 
