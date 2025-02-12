@@ -18,7 +18,7 @@ const SearchResultsSection: React.FC<SearchResultsSectionProps> = ({ title, item
         {items.map((item, index) => {
           const text = typeof item === "string" ? item : item.hotel_name;
           return (
-            <li key={typeof item === "string" ? index : item._id} onClick={() => navigate(`/details/hotels/${text}`)}>
+            <li key={typeof item === "string" ? index : item._id} onClick={() => navigate(`/details/hotels/${text}`)} role="button">
               <a className="dropdown-item">
                 <i className={`${iconClass} mr-2`} aria-hidden="true"></i> {text}
               </a>
