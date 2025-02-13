@@ -133,7 +133,7 @@ Separated backend logic into functions for better reusability and easier testing
 
 - Whenver possible it would be good practice to avoid loading Bootstrap CSS from an external CDN. This posses both security and stability risks, as we cannot guarantee the uptime of the CDN resource or connectivity issues. Instead a better approach would be to have it as a dependency of the project to be installed (npm package for instance).
 
-- In a real-world scenario implementing caching for search results in the backend can significantly enhance performance and reduce unnecessary database queries.
+- In a real-world scenario implementing caching for search results in the backend can significantly enhance performance and reduce unnecessary database queries. For this exercise a minimal caching implementation was provided using "node-cache".
 
 ### Other improvements
 

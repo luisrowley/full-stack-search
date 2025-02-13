@@ -1,12 +1,14 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import NodeCache from "node-cache";
 import { connectDB, getDB } from "./db/init";
 import { escapeRegExp } from "utils/sanitizers";
 
 dotenv.config();
 
 const PORT = process.env.PORT || 3001;
+const cache = new NodeCache({ stdTTL: 300, checkperiod: 320 });
 
 async function startServer() {
   await connectDB();
@@ -19,6 +21,15 @@ async function startServer() {
     try {
       const search = req.query.search as string;
       const sanitizedSearch = escapeRegExp(search);
+
+      // Check search in cache
+      const cacheKey = `hotels_${sanitizedSearch || "all"}`;
+      const cachedData = cache.get(cacheKey);
+      if (cachedData) {
+        return res.json(cachedData);
+      }
+
+      // Query MongoDB if cache miss
       const db = getDB();
       const collection = db.collection("hotels");
 
@@ -33,6 +44,10 @@ async function startServer() {
         : {};
 
       const hotels = await collection.find(filter).toArray();
+
+      // Store in cache
+      cache.set(cacheKey, hotels);
+
       res.json(hotels);
     } catch (error) {
       console.error("Error fetching hotels:", error);
