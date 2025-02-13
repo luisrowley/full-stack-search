@@ -26,7 +26,6 @@ describe("hotelService", () => {
   beforeEach(() => {
     cache = new NodeCache();
     
-    // Mock database methods
     mockCollectionFind = vi.fn();
     mockDb = {
       collection: vi.fn(() => ({
@@ -34,7 +33,6 @@ describe("hotelService", () => {
       })),
     };
 
-    // Mock getDB to return mockDb
     (getDB as Mock).mockReturnValue(mockDb);
   });
 
