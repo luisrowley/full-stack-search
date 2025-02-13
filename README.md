@@ -133,6 +133,8 @@ Separated backend logic into functions for better reusability and easier testing
 
 - Whenver possible it would be good practice to avoid loading Bootstrap CSS from an external CDN. This posses both security and stability risks, as we cannot guarantee the uptime of the CDN resource or connectivity issues. Instead a better approach would be to have it as a dependency of the project to be installed (npm package for instance).
 
+- In a real-world scenario implementing caching for search results in the backend can significantly enhance performance and reduce unnecessary database queries.
+
 ### Other improvements
 
 #### Database connection
@@ -184,6 +186,7 @@ For **Production** deployments a suitable **release plan** should be considered,
 7) Auto-Rollback to revert to the previous version if the error rates or latency surpasses certain limits.
 	
 8) Scalability: Setting auto-scaling based on traffic or CPU/memory usage for the service (AWS Auto Scaling).
+
 	
 
 
