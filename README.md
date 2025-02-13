@@ -95,15 +95,17 @@ This section provides a comprehensive list of all the major changes made to the 
 Originally, the project followed a monolithic approach, with almost all client logic residing in App.tsx. To improve maintainability and modularity, a new file structure was introduced.
 
 Proper separation of concerns was made by organising code into dedicated folders for:
-* Components
-* Pages
-* Types
-* Constants
-* Services
+
+- Components
+- Pages
+- Types
+- Constants
+- Services
 
 The view layer is now divided between two main components (pages):
-* `Home`
-* `SearchDetails`
+
+- `Home`
+- `SearchDetails`
 
 This restructuring makes the codebase more readable, scalable, and easier to maintain.
 
@@ -133,7 +135,7 @@ Separated backend logic into functions for better reusability and easier testing
 
 - Whenver possible it would be good practice to avoid loading Bootstrap CSS from an external CDN. This posses both security and stability risks, as we cannot guarantee the uptime of the CDN resource or connectivity issues. Instead a better approach would be to have it as a dependency of the project to be installed (npm package for instance).
 
-- In a real-world scenario implementing caching for search results in the backend can significantly enhance performance and reduce unnecessary database queries. For this exercise a minimal caching implementation was provided using "node-cache", which can be enhanced in the future for accomodating partial query matches.
+- In a real-world scenario implementing caching for search results in the backend can significantly enhance performance and reduce unnecessary database queries. For this exercise a minimal caching implementation was provided using "node-cache", which can be enhanced in the future for accomodating partial query matches. Also a middleware layer could be applied instead of relying on specific endpoints for a more general approach.
 
 ### Other improvements
 
@@ -166,29 +168,18 @@ A custom script has been added to `package.json` to add suport for API unit test
 npm run test:api
 ```
 
-
 ### Production readiness
 
 For **Production** deployments a suitable **release plan** should be considered, including:
 
-1) Expanding existing unit, integration and e2e tests.
-	
-2) Chaos Testing: Simulating failure scenarios to test the service's resilience.
-	
-3) CI/CD Pipeline setup: with code linting, static analysis, unit and integration tests steps.
-	
-4) Monitoring and Observability of the services (e.g.: Prometheus metrics and Grafana dashboards).
-	
-5) Post-release plan: deploying the service gradually by different regions (e.g.: EU, US, AP)
-	
-6) Alerting mechanisms for key metrics, e.g.: High latency, error rates surpassing a set threshold.
-	
-7) Auto-Rollback to revert to the previous version if the error rates or latency surpasses certain limits.
-	
-8) Scalability: Setting auto-scaling based on traffic or CPU/memory usage for the service (AWS Auto Scaling).
-
-	
-
+1. Expanding existing unit, integration and e2e tests.
+2. Chaos Testing: Simulating failure scenarios to test the service's resilience.
+3. CI/CD Pipeline setup: with code linting, static analysis, unit and integration tests steps.
+4. Monitoring and Observability of the services (e.g.: Prometheus metrics and Grafana dashboards).
+5. Post-release plan: deploying the service gradually by different regions (e.g.: EU, US, AP)
+6. Alerting mechanisms for key metrics, e.g.: High latency, error rates surpassing a set threshold.
+7. Auto-Rollback to revert to the previous version if the error rates or latency surpasses certain limits.
+8. Scalability: Setting auto-scaling based on traffic or CPU/memory usage for the service (AWS Auto Scaling).
 
 #### Hotels Collection
 

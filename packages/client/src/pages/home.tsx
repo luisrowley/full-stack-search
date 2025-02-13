@@ -1,10 +1,10 @@
-import { useState, type ChangeEvent, useCallback, useRef, useEffect } from 'react';
-import { debounce } from "lodash";
+import { useState, type ChangeEvent, useCallback } from 'react';
 import { Hotel } from '../types/hotel';
 import { DEBOUNCE_DELAY } from '../constants/api-connection';
 import { sanitizeInput } from '../utils/sanitizers';
 import SearchResultsSection from '../components/SearchResultsSection';
 import { fetchHotels } from '../services/hotelService';
+import { useDebounce } from '../hooks/useDebounce';
 
 function HomePage () {
     const [hotels, setHotels] = useState<Hotel[]>([]);
@@ -12,20 +12,6 @@ function HomePage () {
     const [cities, setCities] = useState<string[]>([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [loading, setLoading] = useState(false);
-  
-    // Debounce to reduce API calls
-    const debouncedSearch = useRef(
-      debounce(async (value: string) => {
-        await handleFetchHotels(value);
-      }, DEBOUNCE_DELAY)
-    ).current;
-  
-    // Stop any pending invocation of the debounced function
-    useEffect(() => {
-      return () => {
-        debouncedSearch.cancel();
-      };
-    }, []);
 
     const handleFetchHotels = useCallback(async (searchTerm: string) => {
       setLoading(true);
@@ -38,6 +24,8 @@ function HomePage () {
         setLoading(false);
       }
     }, []);
+
+    const debouncedSearch = useDebounce(handleFetchHotels, DEBOUNCE_DELAY);
   
     const processHotelData = (hotelsData: Hotel[], searchTerm: string) => {
       const countrySet = new Set<string>();
