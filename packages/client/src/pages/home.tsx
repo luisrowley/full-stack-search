@@ -92,13 +92,13 @@ function HomePage () {
                 {searchTerm && (
                   <div className="search-dropdown-menu dropdown-menu w-100 show p-2">
                   {hotels.length > 0 && (
-                    <SearchResultsSection title="Hotels" items={hotels} iconClass="fa fa-building" />
+                    <SearchResultsSection title="Hotels" type="Hotel" items={hotels} iconClass="fa fa-building" />
                   )}
                   {countries.length > 0 && (
-                    <SearchResultsSection title="Countries" items={countries} iconClass="fa fa-globe" />
+                    <SearchResultsSection title="Countries" type="Country" items={countries} iconClass="fa fa-globe" />
                   )}
                   {cities.length > 0 && (
-                    <SearchResultsSection title="Cities" items={cities} iconClass="fa fa-map-marker" />
+                    <SearchResultsSection title="Cities" type="City" items={cities} iconClass="fa fa-map-marker" />
                   )}
                   {!loading && hotels.length === 0 && searchTerm &&
                     <div className="d-flex justify-content-center align-items-center mt-2">
