@@ -137,6 +137,8 @@ Separated backend logic into functions for better reusability and easier testing
 
 - In a real-world scenario implementing caching for search results in the backend can significantly enhance performance and reduce unnecessary database queries. For this exercise a minimal caching implementation was provided using "node-cache", which can be enhanced in the future for accomodating partial query matches. Also a middleware layer could be applied instead of relying on specific endpoints for a more general approach.
 
+- Client-side caching should also be considered in order to prevent unnecessary calls to the API for resources that have already been fetched. For this purpose, we can consider an asynchronous state management tool like [Tanstack Query](https://tanstack.com/query/latest) that allows to also keep track of pending and loading states out of the box.
+
 - A rate-limiter should also be considered for limiting API requests from given IP addresses to a certain maximum value. This could also be implemented as a middleware with a config file for setting specific limits per each endpoint. With this solution we provide a first layer of protection against DDOS attacks to our services.
 
 - Regex queries were implemented as a solution to partial matches given the relatively small size of the collections, but this is not the most performant approach for large datasets. While indexed queries would pose the problem of being limited to prefix and exact matches, a tool like ElasticSearch would accomodate partial matches and provide a more scalable alternative.
