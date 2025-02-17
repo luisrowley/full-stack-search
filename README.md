@@ -137,6 +137,8 @@ Separated backend logic into functions for better reusability and easier testing
 
 - In a real-world scenario implementing caching for search results in the backend can significantly enhance performance and reduce unnecessary database queries. For this exercise a minimal caching implementation was provided using "node-cache", which can be enhanced in the future for accomodating partial query matches. Also a middleware layer could be applied instead of relying on specific endpoints for a more general approach.
 
+- A rate-limiter should also be considered for limiting API requests from given IP addresses to a certain maximum value. This could also be implemented as a middleware with a config file for setting specific limits per each endpoint. With this solution we provide a first layer of protection against DDOS attacks to our services.
+
 ### Other improvements
 
 #### Database connection
