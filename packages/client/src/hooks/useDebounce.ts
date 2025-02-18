@@ -15,7 +15,7 @@ export const useDebounce = <T extends (...args: any[]) => any>(callback: T, dela
     return () => {
       debouncedFn.cancel();
     };
-  }, [debouncedFn]);
+  }, []);
 
   return debouncedFn;
 };
